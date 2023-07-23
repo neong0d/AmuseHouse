@@ -7,7 +7,7 @@ from django.utils.translation import gettext as _
 from rest_framework import serializers
 
 
-class UserSerializer(serializers.ModelSerializer):
+class CreateUserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = get_user_model()
@@ -26,3 +26,23 @@ class UserSerializer(serializers.ModelSerializer):
                 user.save()
 
             return user
+
+
+
+class UserLoginSerializer(serializers.Serializer):
+    username = serializers.CharField()
+    password = serializers.CharField()
+
+    def validate(self, data):
+        username = data.get('username')
+        password = data.get("password")
+
+        if username and password:
+            user = authenticate(username=username, password=password)
+            if not user:
+                raise serializers.ValidationError("Invalid credentials")
+        else:
+            raise serializers.ValidationError("username and password must be provided")
+
+        data["user"] = user
+        return data
