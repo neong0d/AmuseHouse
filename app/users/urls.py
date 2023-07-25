@@ -1,15 +1,15 @@
+"""
+URL mappings for the user API.
+"""
 from django.urls import path
 
-from .views import (
-    CreateUserView,
-    UserLoginView,
-    UserLogoutView,
-)
+from . import views
 
-app_name = 'user'
+
+app_name = 'users'
 
 urlpatterns = [
-    path('create/', CreateUserView.as_view(), name='create_user'),
-    path('login/', UserLoginView.as_view(), name='login'),
-    path('logout/', UserLogoutView.as_view(), name='logout'),
+    path('create/', views.CreateUserView.as_view(), name='create'),
+    path('token/', views.CreateTokenView.as_view(), name='token'),
+    path('me/', views.ManageUserView.as_view(), name='me'),
 ]
